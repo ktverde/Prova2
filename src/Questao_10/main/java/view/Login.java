@@ -21,8 +21,6 @@ public class Login extends JFrame {
     private JTextField LoginUser;
     private JPasswordField PasswordUser;
     private JButton LoginButton;
-    private JLabel User;
-    private JLabel Password;
     private JButton cadastrarButton;
     private JLabel Image;
 
@@ -50,6 +48,8 @@ public class Login extends JFrame {
         this.setContentPane(panel1);
         this.pack();
         setSize(new Dimension(480,420));
+        setLocationRelativeTo(null);
+        setVisible(true);
 
         LoginButton.addActionListener(new ActionListener() {
             @Override
@@ -62,7 +62,6 @@ public class Login extends JFrame {
                     if (user.equals(i.getUsuario()) && senha.equals(i.getSenha())) {
                         sc.setUsuario(i);
                         View menu = new View("Risograma", sc);
-                        menu.setVisible(true);
                         setVisible(false);
                         dispose();
                     }
@@ -78,8 +77,7 @@ public class Login extends JFrame {
         cadastrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Cadastrar cadastrarMenu = new Cadastrar("Cadastrar-se", uc);
-                cadastrarMenu.setVisible(true);
+                new Cadastrar("Cadastrar-se", uc);
             }
         });
     }

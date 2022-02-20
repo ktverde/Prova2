@@ -15,12 +15,12 @@ public class Produto{
 
     public Produto() {
     }
-    public Produto(Scanner oferta){
-        this.nome = oferta.next();
-        this.descricao = oferta.next();
-        this.desconto = oferta.nextDouble();
-        this.dataInicio = LocalDate.parse(oferta.next());
-        this.valor = oferta.nextDouble();
+    public Produto(Scanner ofertaCSV){
+        this.nome = ofertaCSV.next();
+        this.descricao = ofertaCSV.next();
+        this.desconto = ofertaCSV.nextDouble();
+        this.dataInicio = LocalDate.parse(ofertaCSV.next());
+        this.valor = ofertaCSV.nextDouble();
     }
 
     public Produto(String nome, String descricao, double desconto, double valor) {
@@ -53,11 +53,6 @@ public class Produto{
     public void setId(Integer id) {
         this.id = id;
     }
-    public void setNome(String nome) { this.nome = nome; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
-    public void setDesconto(double desconto) { this.desconto = desconto; }
-    public void setValor(double valor) { this.valor = valor; }
-    public void setDataInicio(LocalDate dataInicio) { this.dataInicio = dataInicio; }
 
     @Override
     public String toString() {

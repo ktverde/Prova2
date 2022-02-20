@@ -35,6 +35,8 @@ public class Cadastrar extends JFrame{
         this.setContentPane(panel1);
         this.pack();
         setSize(new Dimension(480,520));
+        setLocationRelativeTo(null);
+        setVisible(true);
 
 
         salvarButton.addActionListener(new ActionListener() {

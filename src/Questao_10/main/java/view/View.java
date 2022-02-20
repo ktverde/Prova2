@@ -43,11 +43,13 @@ public class View extends JFrame{
             e.printStackTrace();
         }
 
-        this.setSize(new Dimension(760, 580));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(panel1);
         this.pack();
+        setSize(new Dimension(960, 460));
+        setLocationRelativeTo(null);
+        setVisible(true);
 
         botaoFeliz.addActionListener(new ActionListener() {
             @Override
@@ -65,8 +67,6 @@ public class View extends JFrame{
         salvarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<Integer> lista = sc.buscarTodos();
-                lista.forEach(System.out::println);
                 salvar();
             }
         });
@@ -80,9 +80,9 @@ public class View extends JFrame{
     }
 
     private void salvar() {
-        if (!textValue.getText().equals("")) {
+        if (!this.textValue.getText().equals("")) {
             int count = 0;
-            String texto = textValue.getText();
+            String texto = this.textValue.getText();
             StringBuilder aux = new StringBuilder("");
             String status;
 
@@ -101,10 +101,14 @@ public class View extends JFrame{
                     aux.append(texto.charAt(i));
                 }
             }
+            if(aux.indexOf(":-)") != -1) count++;
+            else if(aux.indexOf(":-(") != -1) count--;
+
             if(count > 0) status = "Divertido";
             else if(count < 0) status = "Chateado";
             else status = "Neutro";
-            Sentimento sentimento = new Sentimento(textValue.getText(), status, sc.getUsuario());
+
+            Sentimento sentimento = new Sentimento(this.textValue.getText(), status, this.sc.getUsuario());
 
             this.sc.salvar(sentimento);
             JOptionPane.showMessageDialog(this, "Salvo com sucesso! Status: "+ status);

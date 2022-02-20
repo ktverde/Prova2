@@ -85,8 +85,11 @@ public class Usuario
 
         if(pc.buscarId(id).size() == 0) System.out.println("Esse id já foi excluído do nosso sistema.");
         else{
-            System.out.println("Id encontrado.");
-            pc.deletar(id);
+            System.out.println("Id encontrado, deseja excluir essa oferta? (S/N) ");
+            String opcao = new Scanner(System.in).nextLine();
+            if (opcao.charAt(0) == 's' || opcao.charAt(0) == 'S'){
+                pc.deletar(id);
+            }
         }
     }
 
@@ -101,10 +104,10 @@ public class Usuario
 
         Scanner nomePesquisar = new Scanner(nome);
         nomePesquisar.useDelimiter(" ");
-        while(nomePesquisar.hasNext()) {
-            String nomePesquisa = nomePesquisar.next();
-            listaPalavrasPesquisa.add(nomePesquisa);
-        }
+
+        while(nomePesquisar.hasNext())
+            listaPalavrasPesquisa.add(nomePesquisar.next());
+
         nomePesquisar.close();
 
         List<Produto> produtos = pc.listar();
@@ -114,9 +117,8 @@ public class Usuario
             Scanner nomeProduto = new Scanner(p.getNome().toUpperCase());
             nomeProduto.useDelimiter(" ");
             while(nomeProduto.hasNext()){
-                String nome2 = nomeProduto.next();
                 for (String s:listaPalavrasPesquisa) {
-                    if(nome2.equals(s)) {
+                    if(nomeProduto.next().equals(s)) {
                         listaProdutos.add(p);
                         count++;
                     }
