@@ -16,8 +16,9 @@ public class SentimentoDAO
     }
 
     public void salvar(Sentimento sentimento){
+        em.getTransaction().begin();
         this.em.persist(sentimento);
-        em.flush();
+        em.getTransaction().commit();
     }
     public void atualizar(Sentimento sentimento){
         this.em.merge(sentimento);
@@ -26,10 +27,11 @@ public class SentimentoDAO
         this.em.remove(em.merge(sentimento));
     }
 
-    public List<Sentimento> buscarTodos(){
-        String jpql = "SELECT s FROM Sentimento s";
-        return em.createQuery(jpql, Sentimento.class).getResultList();
+    public List<Integer> buscarTodos(){
+        String jpql = "SELECT s.usuario.id FROM Sentimento s";
+        return em.createQuery(jpql, Integer.class).getResultList();
     }
+
 
 
 

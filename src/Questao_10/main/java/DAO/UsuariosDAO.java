@@ -14,8 +14,9 @@ public class UsuariosDAO
     }
 
     public void salvar(UsuariosDB usuarios){
+        this.em.getTransaction().begin();
         this.em.persist(usuarios);
-        em.flush();
+        em.getTransaction().commit();
     }
     public void atualizar(UsuariosDB usuarios){
         this.em.merge(usuarios);

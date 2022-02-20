@@ -1,12 +1,18 @@
 package view;
 
 import Controller.SentimentoController;
+import Factory.EManagerFactory;
 import Models.Sentimento;
+import Models.UsuariosDB;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Collection;
+import java.util.List;
 
 public class View extends JFrame{
     private JTextField textValue;
@@ -14,25 +20,32 @@ public class View extends JFrame{
     private JButton botaoTriste;
     private JPanel panel1;
     private JButton salvarButton;
+    private JButton voltarButton;
 
-    private SentimentoController controller;
-    public View(String msg) {
+    private SentimentoController sc;
+
+    public View(String msg, SentimentoController sc) {
         super(msg);
+
+        this.sc = sc;
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                EManagerFactory.getEm().close();
+            }
+        });
+
         try {
-            // Set System L&F
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int height = screenSize.height * 2 / 3;
-        int width = screenSize.width * 2 / 3;
-        this.setPreferredSize(new Dimension(width, height));
+        this.setSize(new Dimension(760, 580));
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //this.setSize(500, 1000);
         this.setContentPane(panel1);
         this.pack();
 
@@ -52,17 +65,49 @@ public class View extends JFrame{
         salvarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                List<Integer> lista = sc.buscarTodos();
+                lista.forEach(System.out::println);
+                salvar();
+            }
+        });
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Login("Login").setVisible(true);
+                dispose();
             }
         });
     }
 
     private void salvar() {
         if (!textValue.getText().equals("")) {
-            Sentimento sentimento = new Sentimento(textValue.getText());
+            int count = 0;
+            String texto = textValue.getText();
+            StringBuilder aux = new StringBuilder("");
+            String status;
 
-            this.controller.salvar(sentimento);
-            JOptionPane.showMessageDialog(this, "Salvo com sucesso!");
+            for(int i=0; i<texto.length(); i++){
+                if(aux.indexOf(":-)") != -1){
+                    aux.setLength(0);
+                    count++;
+                    i--;
+                }
+                else if(aux.indexOf(":-(") != -1){
+                    aux.setLength(0);
+                    count--;
+                    i--;
+                }
+                else{
+                    aux.append(texto.charAt(i));
+                }
+            }
+            if(count > 0) status = "Divertido";
+            else if(count < 0) status = "Chateado";
+            else status = "Neutro";
+            Sentimento sentimento = new Sentimento(textValue.getText(), status, sc.getUsuario());
+
+            this.sc.salvar(sentimento);
+            JOptionPane.showMessageDialog(this, "Salvo com sucesso! Status: "+ status);
             this.textValue.setText("");
         } else {
             JOptionPane.showMessageDialog(this, "Mensagem deve ser informada.");

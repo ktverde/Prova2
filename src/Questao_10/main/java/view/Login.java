@@ -1,12 +1,16 @@
 package view;
 
+import Controller.SentimentoController;
 import Controller.UsuariosController;
+import Factory.EManagerFactory;
 import Models.UsuariosDB;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
@@ -23,13 +27,29 @@ public class Login extends JFrame {
     private JLabel Image;
 
     private UsuariosController uc = new UsuariosController();
+    private SentimentoController sc = new SentimentoController();
+
     public Login(String title){
         super(title);
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                EManagerFactory.getEm().close();
+            }
+        });
+
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(panel1);
         this.pack();
-        setSize(new Dimension(680,820));
+        setSize(new Dimension(480,420));
 
         LoginButton.addActionListener(new ActionListener() {
             @Override
@@ -39,24 +59,26 @@ public class Login extends JFrame {
                 String senha = new String(PasswordUser.getPassword());
 
                 lista.forEach(i -> {
-                    if(user.equals(i.getUsuario()) && senha.equals(i.getSenha())){
-                        View menu = new View("Risograma");
+                    if (user.equals(i.getUsuario()) && senha.equals(i.getSenha())) {
+                        sc.setUsuario(i);
+                        View menu = new View("Risograma", sc);
                         menu.setVisible(true);
                         setVisible(false);
                         dispose();
                     }
                 });
-                LoginUser.setText("");
-                PasswordUser.setText("");
-                showMessageDialog(null, "Usuário não Encontrado!","Informação",INFORMATION_MESSAGE);
+                if (isVisible()){
+                    LoginUser.setText("");
+                    PasswordUser.setText("");
+                    showMessageDialog(null, "Usuário não Encontrado!", "Informação", INFORMATION_MESSAGE);
+                }
 
             }
         });
         cadastrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                uc.getEm().close();
-                Cadastrar cadastrarMenu = new Cadastrar("Cadastrar-se");
+                Cadastrar cadastrarMenu = new Cadastrar("Cadastrar-se", uc);
                 cadastrarMenu.setVisible(true);
             }
         });

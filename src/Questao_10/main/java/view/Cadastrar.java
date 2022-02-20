@@ -17,12 +17,21 @@ public class Cadastrar extends JFrame{
     private JTextField senhaText;
     private JButton salvarButton;
     private JPanel panel1;
+    private JButton voltarButton;
 
     private UsuariosController uc;
-    public Cadastrar(String title){
+    public Cadastrar(String title, UsuariosController uc){
         super(title);
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        try {
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        this.uc = uc;
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setContentPane(panel1);
         this.pack();
         setSize(new Dimension(480,520));
@@ -45,6 +54,12 @@ public class Cadastrar extends JFrame{
                     senhaText.setText("");
                     showMessageDialog(null, "Não deixe campos em branco!","Informação",INFORMATION_MESSAGE);
                 }
+            }
+        });
+        voltarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
             }
         });
     }

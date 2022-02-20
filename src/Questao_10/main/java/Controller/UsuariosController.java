@@ -16,7 +16,6 @@ public class UsuariosController
     public UsuariosController(){
         this.em = EManagerFactory.getEm();
         dao = new UsuariosDAO(this.em);
-        em.getTransaction().begin();
     }
     public void salvar(UsuariosDB usuarios){
         dao.salvar(usuarios);
@@ -28,7 +27,4 @@ public class UsuariosController
         return dao.listarTodos();
     }
 
-    public EntityManager getEm() {
-        return em;
-    }
 }

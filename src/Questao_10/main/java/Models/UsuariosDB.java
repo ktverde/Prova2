@@ -17,7 +17,7 @@ public class UsuariosDB
     public UsuariosDB() {
     }
 
-    public UsuariosDB(String usuario, String nome, String senha) {
+    public UsuariosDB(String nome, String usuario, String senha) {
         this.usuario = usuario;
         this.nome = nome;
         this.senha = senha;
